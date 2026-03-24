@@ -117,6 +117,7 @@ export function initExercise1() {
     map: tileTexture,
     roughness: floorProps.roughness,
     metalness: floorProps.metalness,
+    side: THREE.DoubleSide,
   });
 
   // Floor
@@ -164,7 +165,7 @@ export function initExercise1() {
   const cabinetMat = createStandardMaterial(cabinetProps);
 
   var cabinetSize = { width: 3.2, height: 0.9, depth: 1.0 };
-  var cabinetPos = { x: 0, y: 0.45, z: 0 };
+  var cabinetPos = { x: 0, y: 0.451, z: 0 };
   createBoxMesh(cabinetSize, cabinetMat, cabinetPos, {
     castShadow: true,
     receiveShadow: true,

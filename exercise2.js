@@ -173,7 +173,7 @@ export function initExercise2() {
         new THREE.BoxGeometry(0.18, 0.5, 0.2),
         bodyMat,
       );
-      legMesh.position.set(xPos, 0.25, 0);
+      legMesh.position.set(xPos, 0.251, 0.0);
       legMesh.castShadow = true;
       robotRoot.add(legMesh);
     });
