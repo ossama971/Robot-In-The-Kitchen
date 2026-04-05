@@ -81,28 +81,6 @@ export function initExercise1() {
   const ambientLight = new THREE.AmbientLight(ambientColor, ambientIntensity);
   scene.add(ambientLight);
 
-  // Ceiling lamp above the counter
-  var spotColor = 0xfff5e0;
-  var spotIntensity = 1.8;
-  var spotDistance = 10;
-  var spotAngle = Math.PI / 5;
-  var spotPenumbra = 0.3;
-  var spotDecay = 1;
-  var spotPos = { x: 0, y: 3.8, z: 0 };
-  var spotTarget = { x: 0, y: 0.95, z: 0 };
-
-  const spotLight = new THREE.SpotLight(
-    spotColor,
-    spotIntensity,
-    spotDistance,
-    spotAngle,
-    spotPenumbra,
-    spotDecay,
-  );
-  spotLight.position.set(spotPos.x, spotPos.y, spotPos.z);
-  spotLight.target.position.set(spotTarget.x, spotTarget.y, spotTarget.z);
-  spotLight.castShadow = true;
-  scene.add(spotLight, spotLight.target);
 
   // Room
   // Tile Texture
