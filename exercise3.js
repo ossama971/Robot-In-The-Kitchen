@@ -194,7 +194,7 @@ function applyMaterialParams(meshes, sourceMaterial) {
 }
 
 function createExercise3Gui({ ambient, mainLight, refs }) {
-  const gui = new GUI({ title: "Exercise 3 Controls" });
+  const gui = new GUI({ title: "Lighting and Materials Controls" });
 
   // TODO 10 (build ambient controls):
   // Add intensity slider for ambient light.

@@ -164,7 +164,7 @@ export function initExercise2() {
     const { bodyMat, limbMat, jointMat, handMat, headMat, eyeMat } = materials;
 
     const robotRoot = new THREE.Group();
-    robotRoot.position.set(2.5, 0, 0);
+    robotRoot.position.set(3.0, 0, 0);
 
     // Legs
     [-0.13, 0.13].forEach((xPos) => {
