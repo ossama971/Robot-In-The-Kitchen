@@ -59,6 +59,20 @@ export function initExercise1() {
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   document.body.appendChild(renderer.domElement);
 
+  // Prevent the browser from permanently destroying the WebGL context when the
+  // GPU is reset or memory is reclaimed (sleep, too many tabs, power management).
+  // Without this the canvas goes blank and the only recovery is a manual page reload.
+  renderer.domElement.addEventListener("webglcontextlost", (e) => {
+    e.preventDefault(); // signal we will handle recovery ourselves
+  }, false);
+
+  renderer.domElement.addEventListener("webglcontextrestored", () => {
+    // Re-apply settings that live on the context (lost when GPU resets).
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.setPixelRatio(window.devicePixelRatio);
+  }, false);
+
   var fov = 50;
   var aspect = window.innerWidth / window.innerHeight;
   var near = 0.1;

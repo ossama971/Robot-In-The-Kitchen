@@ -39,9 +39,9 @@
       const { scene, camera, renderer, controls } = initExercise3Hints();
 
       function animate() {
+        requestAnimationFrame(animate);
         controls.update();
         renderer.render(scene, camera);
-        requestAnimationFrame(animate);
       }
       animate();
     </script>
