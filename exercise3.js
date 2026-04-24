@@ -14,25 +14,26 @@ export function initExercise3Hints() {
 
   // Overwrite casting and recieving shadows for meshes createed previously.
   // Mostly redundant as already set up while materials initializations.
-  // TODO 1 (build robot shadow behavior):
+
+  // robot shadow behavior:
   refs.robotMeshes.forEach((mesh) => {
     mesh.material = ensureMeshStandard(mesh.material); //ensure they react to lighting
     mesh.castShadow = true; //robot to create shadows
   });
 
-  // TODO 2 (build counter-object shadow behavior):
+  // counter-object shadow behavior:
   refs.counterObjects.forEach((mesh) => {
     mesh.material = ensureMeshStandard(mesh.material);
     mesh.castShadow = true; //objects to create sshadows
   });
 
-  // TODO 3 (build floor receiving surface):
+  // floor receiving surface:
   if (refs.floor) {
     refs.floor.material = ensureMeshStandard(refs.floor.material);
     refs.floor.receiveShadow = true;
   }
 
-  // TODO 4 (build counter receiving surface):
+  // counter receiving surface:
   if (refs.counterTop) {
     refs.counterTop.material = ensureMeshStandard(refs.counterTop.material);
     refs.counterTop.receiveShadow = true;
@@ -79,7 +80,7 @@ function collectExercise3References(scene, robot) {
       return;
     }
 
-    // TODO 5 (build countertop detection logic):
+    // countertop detection logic:
     if (obj.geometry.type === "BoxGeometry") {
       obj.geometry.computeBoundingBox();
       const boundingBox = obj.geometry.boundingBox;
@@ -96,7 +97,7 @@ function collectExercise3References(scene, robot) {
         return;
       }
 
-      // cabinet body detection: y≈0.451, 3.2×0.9×1.0
+      // cabinet body detection: y≈0.451, 3.2×0.9×1.0(w×h×d)
       const cabinetY = obj.position.y > 0.3 && obj.position.y < 0.6;
       const cabinetDim = h > 0.8 && w > 2.5 && d > 0.8;
       if (cabinetY && cabinetDim) {
@@ -105,7 +106,7 @@ function collectExercise3References(scene, robot) {
       }
     }
 
-    // TODO 6 (build counter objects filtering):
+    // counter objects filtering:
     const onCounterHieght = obj.position.y > 0.95 && obj.position.y < 1.25; //Range for cup and plate
     const notRobot = !robotMeshes.includes(obj);
     if (
@@ -174,7 +175,7 @@ function ensureMeshStandard(material) {
   }
   if (material.isMeshStandardMaterial) return material;
 
-  // TODO 8 (build safe material conversion):
+  // safe material conversion:
   return new THREE.MeshStandardMaterial({
     color: material.color ? material.color.getHex() : 0xbbbbbb, //preserve color if exists, otherwise fallback
     map: material.map || null, //preserve texture map if exists otherwise null
@@ -184,7 +185,7 @@ function ensureMeshStandard(material) {
 }
 
 function applyMaterialParams(meshes, sourceMaterial) {
-  // TODO 9 (build shared material propagation):
+  // shared material propagation:
   meshes.forEach((mesh) => {
     const mat = mesh.material;
     if (!mat || !mat.isMeshStandardMaterial) return;
@@ -196,14 +197,14 @@ function applyMaterialParams(meshes, sourceMaterial) {
 function createExercise3Gui({ ambient, mainLight, refs }) {
   const gui = new GUI({ title: "Lighting and Materials Controls" });
 
-  // TODO 10 (build ambient controls):
+  // ambient controls:
   // Add intensity slider for ambient light.
-  // Suggested range: 0..1.5, step 0.01.
+  // Suggested range: 0 to 1.5, step 0.01.
   const ambientFolder = gui.addFolder("Ambient Light");
   ambientFolder.add(ambient, "intensity", 0, 1.5, 0.01).name("intensity"); //start , end, step, name
 
   const lightFolder = gui.addFolder("Main Spot Light");
-  // TODO 11 (build main light controls):
+  //main light controls:
   lightFolder.add(mainLight, "intensity", 0, 5, 0.01).name("intensity");
   lightFolder.add(mainLight, "angle", 0.1, Math.PI / 2, 0.001).name("angle");
   lightFolder.add(mainLight, "penumbra", 0, 1, 0.01).name("penumbra");
@@ -213,7 +214,7 @@ function createExercise3Gui({ ambient, mainLight, refs }) {
   lightFolder.add(mainLight.position, "z", -5, 5, 0.01).name("position z");
 
   const shadowFolder = gui.addFolder("Shadow Quality");
-  // TODO 12 (build shadow quality controls):
+  // shadow quality controls:
   shadowFolder.add(mainLight.shadow, "bias", -0.01, 0.01, 0.00001).name("bias");
   shadowFolder
     .add(mainLight.shadow, "normalBias", 0, 1, 0.001)
@@ -236,7 +237,7 @@ function createExercise3Gui({ ambient, mainLight, refs }) {
   const counterMaterial = refs.counterTop?.material; //assume the countertop has a single material
   const counterBodyMaterial = refs.counterBody?.material;
 
-  // TODO 13 (build robot material controls):
+  // robot material controls:
   if (robotMaterial?.isMeshStandardMaterial) {
     const robotMatFolder = gui.addFolder("Robot Material");
     robotMatFolder
@@ -254,7 +255,7 @@ function createExercise3Gui({ ambient, mainLight, refs }) {
       });
   }
 
-  // TODO 14 (build counter-object material controls):
+  // counter-object material controls:
   if (objectMaterial?.isMeshStandardMaterial) {
     const objectMatFolder = gui.addFolder("Objects Material");
     objectMatFolder
@@ -272,7 +273,7 @@ function createExercise3Gui({ ambient, mainLight, refs }) {
       });
   }
 
-  // TODO 15 (build countertop material controls):
+  // countertop material controls:
   if (counterMaterial?.isMeshStandardMaterial) {
     const counterFolder = gui.addFolder("Counter Material");
     counterFolder
@@ -291,8 +292,7 @@ function createExercise3Gui({ ambient, mainLight, refs }) {
       });
   }
 
-  // Keep references used so the variable is meaningful while TODO 12 is unfinished.
-  void shadowMapOptions;
+  void shadowMapOptions; //to prevent "declared but not used" error for the dropdown options object
 
   return gui;
 }

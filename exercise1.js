@@ -6,6 +6,8 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
  * Returns { scene, camera, renderer, controls }.
  */
 export function initExercise1() {
+  const SCENE_BACKGROUND = 0x0f1115; // dark gray
+
   function createStandardMaterial({ color, roughness, metalness }) {
     return new THREE.MeshStandardMaterial({ color, roughness, metalness }); // for lighting in Ex3
   }
@@ -31,7 +33,7 @@ export function initExercise1() {
     geomProps,
     material,
     position,
-    { castShadow = true, receiveShadow = true } = {},
+    { castShadow = true, receiveShadow = true } = {}, //will be overridden later on ex3
   ) {
     const mesh = new THREE.Mesh(
       new THREE.CylinderGeometry(
@@ -51,27 +53,34 @@ export function initExercise1() {
 
   // scene setup
   const scene = new THREE.Scene();
+  scene.background = new THREE.Color(SCENE_BACKGROUND);
 
-  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   document.body.appendChild(renderer.domElement);
 
-  // Prevent the browser from permanently destroying the WebGL context when the
-  // GPU is reset or memory is reclaimed (sleep, too many tabs, power management).
-  // Without this the canvas goes blank and the only recovery is a manual page reload.
-  renderer.domElement.addEventListener("webglcontextlost", (e) => {
-    e.preventDefault(); // signal we will handle recovery ourselves
-  }, false);
+  // Context loss handling (from https://www.khronos.org/webgl/wiki/HandlingContextLost)
+  renderer.domElement.addEventListener(
+    "webglcontextlost",
+    (e) => {
+      e.preventDefault();
+    },
+    false,
+  );
 
-  renderer.domElement.addEventListener("webglcontextrestored", () => {
-    // Re-apply settings that live on the context (lost when GPU resets).
-    renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-    renderer.setPixelRatio(window.devicePixelRatio);
-  }, false);
+  renderer.domElement.addEventListener(
+    "webglcontextrestored",
+    () => {
+      // Re-apply settings that live on the context (lost when GPU resets).
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      renderer.setPixelRatio(window.devicePixelRatio);
+    },
+    false,
+  );
 
   var fov = 50;
   var aspect = window.innerWidth / window.innerHeight;
@@ -94,7 +103,6 @@ export function initExercise1() {
   var ambientIntensity = 0.35;
   const ambientLight = new THREE.AmbientLight(ambientColor, ambientIntensity);
   scene.add(ambientLight);
-
 
   // Room
   // Tile Texture
@@ -141,7 +149,6 @@ export function initExercise1() {
   });
 
   //  Counter
-
   var counterProps = { color: 0xd0d4d8, roughness: 0.25, metalness: 0.7 };
   const counterMat = createStandardMaterial(counterProps);
 

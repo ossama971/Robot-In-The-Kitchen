@@ -1,8 +1,8 @@
 import * as THREE from "three";
-import { initExercise1 } from "./exercise1.js";
+import { initExercise1 } from "./exercise1.js"; //Scene setup + kitchen objects
 
 /**
- * Initializes the Exercise 2 scene: Exercise 1 kitchen + The robot.
+ * Initializes the Exercise 2 scene that consists of Exercise 1 kitchen + The robot.
  * Returns { scene, camera, renderer, controls, robot(object) }
  */
 export function initExercise2() {
@@ -134,22 +134,22 @@ export function initExercise2() {
     const shoulderGroup = createLimb(
       torsoGroup,
       new THREE.Vector3(sign * xOffset, yOffset, 0), // position at shoulder pivot
-      { w: 0.12, h: 0.45, d: 0.12 }, // limb size
-      -0.225, // offset to align limb top with shoulder pivot
+      { w: 0.12, h: 0.3, d: 0.12 }, // limb size
+      -0.15, // offset to align limb top with shoulder pivot
       limbMaterial,
     );
 
     const elbowGroup = createLimb(
       shoulderGroup,
-      new THREE.Vector3(0, -0.45, 0), // position at elbow pivot
-      { w: 0.1, h: 0.4, d: 0.1 }, // limb size
-      -0.2, // offset to align limb top with elbow pivot
+      new THREE.Vector3(0, -0.3, 0), // position at elbow pivot
+      { w: 0.1, h: 0.3, d: 0.1 }, // limb size
+      -0.15, // offset to align limb top with elbow pivot
       limbMaterial,
     );
 
     const handGroup = createHand(
       elbowGroup,
-      new THREE.Vector3(0, -0.4, 0), // position at wrist pivot
+      new THREE.Vector3(0, -0.3, 0), // position at wrist pivot
       handMaterial,
       jointMaterial,
     );
@@ -158,7 +158,7 @@ export function initExercise2() {
   }
 
   /**
-   * Assembles the full robot: legs, hips, torso, neck, head, eyes.
+   * Assembles the full robot: legs, hips, torso, neck, head, eyes. All attached to a fixed root
    */
   function createRobotRoot(scene, materials) {
     const { bodyMat, limbMat, jointMat, handMat, headMat, eyeMat } = materials;
@@ -225,7 +225,7 @@ export function initExercise2() {
       torsoGroup.add(eye);
     });
 
-    // Arms — shoulder x = half torso (0.225) + half arm (0.06) = 0.285
+    // Arms, shoulder x = half torso (0.225) + half arm (0.06) = 0.285
     const leftArm = createArm(
       torsoGroup,
       "left",

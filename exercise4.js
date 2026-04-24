@@ -28,7 +28,7 @@ export function initExercise4() {
 
   // Manual Joint Angles
   // When autoAnimate is false the GUI sliders write into this object,
-  // and animateRobot() reads from it instead of computing sin values.
+  // and animateRobot() reads from it.
   const jointAngles = {
     leftShoulderZ: 0, // Abduciton/adduciton
     leftShoulderX: 0, // Flextion/Extension
@@ -39,7 +39,7 @@ export function initExercise4() {
   };
 
   function animateRobot() {
-    const t = Date.now() * 0.001 * animState.speed;
+    const t = Date.now() * 0.001 * animState.speed; // time in seconds, scaled by speed multiplier
 
     if (animState.autoAnimate) {
       robot.arms.left.shoulder.rotation.z = Math.abs(
@@ -69,7 +69,7 @@ export function initExercise4() {
     .name("Auto Animate")
     .onChange((value) => {
       if (!value) {
-        // Switching to manual: snapshot the robot's current animated pose into
+        // Switching to manual snapshot the robot's current animated pose into
         // jointAngles so the sliders pick up exactly where the animation left off.
         jointAngles.leftShoulderZ = robot.arms.left.shoulder.rotation.z;
         jointAngles.leftShoulderX = robot.arms.left.shoulder.rotation.x;
@@ -94,6 +94,7 @@ export function initExercise4() {
   // switch to manual mode so the slider has immediate effect.
   function onManualSliderChange(key, value) {
     if (!animState.autoAnimate) return; // already manual, slider drives directly
+
     // Snapshot all animated joint positions so other joints don't snap to zero
     jointAngles.leftShoulderZ = robot.arms.left.shoulder.rotation.z;
     jointAngles.leftShoulderX = robot.arms.left.shoulder.rotation.x;
@@ -105,39 +106,41 @@ export function initExercise4() {
     jointAngles[key] = value; // update the one slider that triggered this change
     animState.autoAnimate = false; // switch to manual mode
     autoAnimateController.updateDisplay(); // update the autoAnimate checkbox to reflect the change
+
     // Refresh all slider displays to show the snapshotted values.
     manualControl.controllersRecursive().forEach((c) => c.updateDisplay());
   }
 
+  // GUI sliders for each joint.
   const leftArm = manualControl.addFolder("Left Arm");
   leftArm
-    .add(jointAngles, "leftShoulderZ", 0, Math.PI / 2, 0.01)
+    .add(jointAngles, "leftShoulderZ", 0, Math.PI / 2, 0.01) // limit to 90 degrees abduction
     .name("Abduction/adduction")
     .onChange((v) => onManualSliderChange("leftShoulderZ", v));
 
   leftArm
-    .add(jointAngles, "leftShoulderX", -Math.PI / 2, Math.PI / 4, 0.01)
+    .add(jointAngles, "leftShoulderX", -Math.PI / 2, Math.PI / 4, 0.01) // limit to 90 degrees flexion and 45 degrees hyperextension
     .name("flextion/extension")
     .onChange((v) => onManualSliderChange("leftShoulderX", v));
 
   leftArm
-    .add(jointAngles, "leftElbowX", -Math.PI / 1.25, 0, 0.01)
+    .add(jointAngles, "leftElbowX", -Math.PI / 1.25, 0, 0.01) // limit to 144 degrees flexion (like a human elbow)
     .name("Elbow Flextion")
     .onChange((v) => onManualSliderChange("leftElbowX", v));
 
   const rightArm = manualControl.addFolder("Right Arm");
   rightArm
-    .add(jointAngles, "rightShoulderZ", -Math.PI / 2, 0, 0.01)
+    .add(jointAngles, "rightShoulderZ", -Math.PI / 2, 0, 0.01) // limit to 90 degrees abduction
     .name("Abduction/adduction")
     .onChange((v) => onManualSliderChange("rightShoulderZ", v));
 
   rightArm
-    .add(jointAngles, "rightShoulderX", -Math.PI / 2, Math.PI / 4, 0.01)
+    .add(jointAngles, "rightShoulderX", -Math.PI / 2, Math.PI / 4, 0.01) // limit to 90 degrees flexion and 45 degrees hyperextension
     .name("flextion/extension")
     .onChange((v) => onManualSliderChange("rightShoulderX", v));
 
   rightArm
-    .add(jointAngles, "rightElbowX", -Math.PI / 1.25, 0, 0.01)
+    .add(jointAngles, "rightElbowX", -Math.PI / 1.25, 0, 0.01) // limit to 144 degrees flexion (like a human elbow)
     .name("Elbow Flextion")
     .onChange((v) => onManualSliderChange("rightElbowX", v));
 
