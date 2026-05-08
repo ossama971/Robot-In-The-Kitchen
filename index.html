@@ -144,8 +144,9 @@
           <div class="eyebrow">Exercise 1</div>
           <h2>Kitchen Scene</h2>
           <p>
-            Base room layout, geometry, and camera setup for the kitchen
-            environment.
+            PerspectiveCamera (FOV 50°), OrbitControls, PCFSoftShadowMap renderer,
+            tiled PlaneGeometry floor, BoxGeometry walls and counter,
+            CylinderGeometry tableware — all using MeshStandardMaterial.
           </p>
           <span class="cta">Open page</span>
         </a>
@@ -154,38 +155,44 @@
           <div class="eyebrow">Exercise 2</div>
           <h2>Robot Hierarchy</h2>
           <p>
-            Robot construction and articulated hierarchy placed inside the
-            scene.
+            Articulated scene graph: nested THREE.Group pivot chains for
+            shoulder → elbow → wrist. Chrome joint spheres, emissive eye
+            material, and AxesHelpers at each joint origin.
           </p>
           <span class="cta">Open page</span>
         </a>
 
         <a class="card" href="./Exercise_3.html">
           <div class="eyebrow">Exercise 3</div>
-          <h2>Lighting and Shadows</h2>
+          <h2>PBR Lighting &amp; Shadows</h2>
           <p>
-            Lighting refinements and scene presentation on top of the room and
-            robot setup.
+            SpotLight (1024² shadow map, bias −0.00015) over the counter.
+            Runtime scene traversal classifies meshes by bounding-box dimensions.
+            lil-gui exposes light position, shadow quality, and per-group
+            roughness/metalness.
           </p>
           <span class="cta">Open page</span>
         </a>
 
         <a class="card" href="./Exercise_4.html">
           <div class="eyebrow">Exercise 4</div>
-          <h2>Animation and Interaction</h2>
+          <h2>Animation &amp; Interaction</h2>
           <p>
-            Animated robot behavior and interactive controls for the desktop
-            experience.
+            Time-based sinusoidal arm sweep in auto mode; snapshot-on-transition
+            to manual mode with per-joint GUI sliders. Anatomical rotation limits
+            enforced on shoulder abduction/flexion and elbow flexion axes.
           </p>
           <span class="cta">Open page</span>
         </a>
 
         <a class="card" href="./Exercise_5.html">
           <div class="eyebrow">Exercise 5</div>
-          <h2>VR/MR Tele-operation</h2>
+          <h2>WebXR Tele-operation</h2>
           <p>
-            WebXR tele-operation page with VR and AR entry for controller-driven
-            robot arms.
+            VR and AR entry via WebXR Device API. Two-segment analytical IK
+            (law of cosines) maps controller world positions to shoulder/elbow
+            angles with LERP smoothing. AR passthrough hides virtual walls and
+            calibrates eye height on the first XR frame.
           </p>
           <span class="cta">Open page</span>
         </a>

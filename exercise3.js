@@ -12,7 +12,7 @@ export function initExercise3Hints() {
   const ambient = getOrCreateAmbientLight(scene);
   const mainLight = createMainSpotLight(scene, refs.counterTopPositionGuess);
 
-  // Overwrite casting and recieving shadows for meshes createed previously.
+  // Overwrite casting and receiving shadows for meshes created previously.
   // Mostly redundant as already set up while materials initializations.
 
   // robot shadow behavior:

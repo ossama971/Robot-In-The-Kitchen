@@ -124,12 +124,7 @@ export function initExercise2() {
     jointMaterial,
     handMaterial,
   ) {
-    var sign;
-    if (side === "left") {
-      sign = 1; // positive x for left arm
-    } else {
-      sign = -1; // negative x for right arm
-    }
+    const sign = side === "left" ? 1 : -1;
 
     const shoulderGroup = createLimb(
       torsoGroup,

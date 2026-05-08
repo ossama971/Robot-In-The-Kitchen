@@ -30,9 +30,9 @@ export function initExercise4() {
   // When autoAnimate is false the GUI sliders write into this object,
   // and animateRobot() reads from it.
   const jointAngles = {
-    leftShoulderZ: 0, // Abduciton/adduciton
-    leftShoulderX: 0, // Flextion/Extension
-    leftElbowX: 0, // elbow flextion
+    leftShoulderZ: 0, // Abduction/adduction
+    leftShoulderX: 0, // Flexion/extension
+    leftElbowX: 0, // elbow flexion
     rightShoulderZ: 0,
     rightShoulderX: 0,
     rightElbowX: 0,
@@ -120,12 +120,12 @@ export function initExercise4() {
 
   leftArm
     .add(jointAngles, "leftShoulderX", -Math.PI / 2, Math.PI / 4, 0.01) // limit to 90 degrees flexion and 45 degrees hyperextension
-    .name("flextion/extension")
+    .name("flexion/extension")
     .onChange((v) => onManualSliderChange("leftShoulderX", v));
 
   leftArm
     .add(jointAngles, "leftElbowX", -Math.PI / 1.25, 0, 0.01) // limit to 144 degrees flexion (like a human elbow)
-    .name("Elbow Flextion")
+    .name("Elbow Flexion")
     .onChange((v) => onManualSliderChange("leftElbowX", v));
 
   const rightArm = manualControl.addFolder("Right Arm");
@@ -136,12 +136,12 @@ export function initExercise4() {
 
   rightArm
     .add(jointAngles, "rightShoulderX", -Math.PI / 2, Math.PI / 4, 0.01) // limit to 90 degrees flexion and 45 degrees hyperextension
-    .name("flextion/extension")
+    .name("flexion/extension")
     .onChange((v) => onManualSliderChange("rightShoulderX", v));
 
   rightArm
     .add(jointAngles, "rightElbowX", -Math.PI / 1.25, 0, 0.01) // limit to 144 degrees flexion (like a human elbow)
-    .name("Elbow Flextion")
+    .name("Elbow Flexion")
     .onChange((v) => onManualSliderChange("rightElbowX", v));
 
   gui.close();
