@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { VRButton } from "three/addons/webxr/VRButton.js";
 import { ARButton } from "three/addons/webxr/ARButton.js";
-import { initExercise4 } from "./exercise4.js";
+import { initExercise4 } from "../04-animation-interaction/exercise4.js";
 
 const ARM_LENGTHS = {
   // matching the height values in createArm() of ex2

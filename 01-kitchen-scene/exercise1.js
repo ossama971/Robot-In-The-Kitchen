@@ -108,7 +108,7 @@ export function initExercise1() {
   // Tile Texture
   var floorProps = { roughness: 0.7, metalness: 0.0 };
   var loader = new THREE.TextureLoader();
-  var tileTexture = loader.load("Materials/tiles.jpg");
+  var tileTexture = loader.load("../Materials/tiles.jpg");
   tileTexture.wrapS = THREE.RepeatWrapping;
   tileTexture.wrapT = THREE.RepeatWrapping;
   tileTexture.repeat.set(2, 2);

@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { initExercise1 } from "./exercise1.js"; //Scene setup + kitchen objects
+import { initExercise1 } from "../01-kitchen-scene/exercise1.js"; //Scene setup + kitchen objects
 
 /**
  * Initializes the Exercise 2 scene that consists of Exercise 1 kitchen + The robot.

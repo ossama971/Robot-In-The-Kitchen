@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
-import { initExercise3Hints } from "./exercise3.js";
+import { initExercise3Hints } from "../03-pbr-lighting/exercise3.js";
 
 export function initExercise4() {
   // The robot object exposes:

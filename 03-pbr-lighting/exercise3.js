@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
-import { initExercise2 } from "./exercise2.js";
+import { initExercise2 } from "../02-robot-hierarchy/exercise2.js";
 
 export function initExercise3Hints() {
   const { scene, camera, renderer, controls, robot } = initExercise2();

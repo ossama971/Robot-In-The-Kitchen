@@ -1,75 +1,100 @@
 # Robot in the Kitchen
 
-A progressive Three.js rendering pipeline built across five exercises, each extending the last: static kitchen environment → articulated robot → PBR lighting → procedural animation → WebXR tele-operation.
+> **Live demo →** https://ossama971.github.io/Robot-In-The-Kitchen/
 
-| Full Scene (Exercise 3) | WebXR Point of View (Exercise 5) |
+A robot wakes up in a kitchen. That's the premise. Over five exercises we build the whole thing from scratch using Three.js — starting with an empty room and ending with a robot you can puppeteer from inside a VR headset. Each exercise stacks on top of the last, so by the time you reach Exercise 5 you're looking at a fully lit, animated, mixed-reality tele-operation rig built entirely in the browser with no server and no build step.
+
+| Full Scene | WebXR POV |
 |:---:|:---:|
-| ![Full scene with robot and lighting](Figures/scene.jpeg) | ![WebXR POV during tele-operation](Figures/WEBXR.jpeg) |
+| ![Lit scene with robot](Figures/scene.jpeg) | ![WebXR tele-operation view](Figures/WEBXR.jpeg) |
+
+---
+
+## What's in Here
+
+The project is split into five stages. Each one is a self-contained page that imports the previous stage's setup, so you can open any exercise independently without losing context. Click a heading below to jump to its full technical breakdown.
+
+**[Exercise 1 — Kitchen Scene](#exercise-1--kitchen-scene)**
+We set up everything a proper 3D scene needs: a perspective camera, orbit controls, a shadow-capable renderer, and the kitchen itself — tiled floor, walls, a steel countertop, and a couple of props (a cup and a plate). Nothing moves yet, but the geometry and materials are already wired for PBR so lighting in Exercise 3 "just works."
+
+**[Exercise 2 — Articulated Robot Hierarchy](#exercise-2--articulated-robot-hierarchy)**
+The robot enters the scene. It's built as a proper scene-graph hierarchy — nested `THREE.Group` nodes where each group sits at a joint's pivot point, so rotating a group rotates everything hanging off it (exactly like a real skeleton). Shoulders, elbows, wrists, fingers, glowing eyes — all there.
+
+**[Exercise 3 — PBR Lighting and Shadows](#exercise-3--pbr-lighting-and-shadows)**
+A warm spotlight is hung above the counter and the whole scene goes from flat-shaded to physically correct. Shadow maps, bias tuning, per-surface roughness and metalness — all exposed through a lil-gui debug panel so you can tweak everything live. The mesh-collection logic is interesting too: it classifies scene objects by bounding-box dimensions at runtime rather than keeping manual references.
+
+**[Exercise 4 — Procedural Animation and Manual Controls](#exercise-4--procedural-animation-and-manual-controls)**
+The robot's arms start swinging in a sinusoidal wave. There's a full auto ↔ manual mode switch: when you touch a slider the animation freezes and the joint values snapshot into the GUI seamlessly. Anatomically correct rotation limits are applied on every axis.
+
+**[Exercise 5 — WebXR Tele-operation](#exercise-5--webxr-tele-operation)**
+Put on a headset, press the VR or AR button, and move your controllers — the robot's arms follow. Two-segment analytical IK (law of cosines) converts controller world positions into shoulder/elbow angles in real time. AR passthrough makes the virtual walls go semi-transparent so the kitchen feels like it's sitting on your actual desk.
+
+---
+
+## Running It
+
+No build step needed — every page is a static HTML file. Just serve the root from a local server (required for ES module CORS rules):
+
+```bash
+# Python 3
+python3 -m http.server 8080
+
+# Node
+npx serve .
+```
+
+Then open `http://localhost:8080`. The landing page links to all five exercises.
+
+> **WebXR** needs HTTPS or `localhost`. Chrome on Android and Meta Browser on Quest both work well.
 
 ---
 
 ## Tech Stack
 
-| Concern | Solution |
+| | |
 |---|---|
-| 3D rendering | [Three.js r0.182.0](https://threejs.org/) via unpkg CDN |
-| Module loading | ES Module `importmap` + [es-module-shims v1.3.6](https://github.com/guybedford/es-module-shims) |
+| Rendering | Three.js r0.182.0 (unpkg CDN, ES module importmap) |
+| Module shim | es-module-shims v1.3.6 (broadens importmap browser support) |
 | Debug GUI | lil-gui (bundled with Three.js addons) |
-| XR entry | WebXR Device API — `VRButton` / `ARButton` from Three.js addons |
-| Build system | None — every page is a static HTML file |
-
-No `node_modules`, no bundler. Open any `Exercise_N.html` directly in a browser (local server recommended for ES module CORS rules).
+| XR entry | WebXR Device API — `VRButton` / `ARButton` |
+| Build | None |
 
 ---
 
 ## Project Structure
 
 ```
-index.html            # Static landing page — links to all five exercises
-Exercise_1.html       # Kitchen scene
-Exercise_2.html       # Articulated robot
-Exercise_3.html       # PBR lighting + shadow GUI
-Exercise_4.html       # Procedural animation + manual joint controls
-Exercise_5.html       # WebXR VR/AR tele-operation
-exercise1.js          # Scene bootstrap, camera, kitchen geometry
-exercise2.js          # Robot hierarchy, materials, arm-chain factory
-exercise3.js          # Lighting system, shadow config, lil-gui panels
-exercise4.js          # Animation state machine, joint GUI
-exercise5.js          # WebXR controller IK, world-root placement, AR passthrough
-Materials/tiles.jpg   # Tileable floor texture (applied 2×2)
-Figures/scene.jpeg    # Reference screenshot — full lit scene
-Figures/WEBXR.jpeg    # Reference screenshot — WebXR headset POV
+index.html                        # Landing page
+README.md
+Materials/
+  tiles.jpg                       # Tileable floor texture (2×2 repeat)
+Figures/
+  scene.jpeg                      # Full lit scene screenshot
+  WEBXR.jpeg                      # WebXR POV screenshot
+01-kitchen-scene/
+  Exercise_1.html
+  exercise1.js                    # Scene, camera, kitchen geometry
+02-robot-hierarchy/
+  Exercise_2.html
+  exercise2.js                    # Robot scene-graph, materials
+03-pbr-lighting/
+  Exercise_3.html
+  exercise3.js                    # SpotLight, shadow config, lil-gui
+04-animation-interaction/
+  Exercise_4.html
+  exercise4.js                    # Animation state machine, joint GUI
+05-webxr-teleop/
+  Exercise_5.html
+  exercise5.js                    # WebXR IK, world placement, AR passthrough
 ```
 
-Each exercise JS file imports and re-uses the previous one, so the dependency chain is:
-
-```
-exercise1 ← exercise2 ← exercise3 ← exercise4 ← exercise5
-```
-
----
-
-## Running Locally
-
-Any static file server works. Examples:
-
-```bash
-# Python 3
-python3 -m http.server 8080
-
-# Node (npx)
-npx serve .
-```
-
-Then open `http://localhost:8080` to reach the landing page.
-
-> **WebXR (Exercise 5)** additionally requires HTTPS or `localhost`. Chrome on Android / Meta Browser on Quest work well.
+Dependency chain: `exercise1 ← exercise2 ← exercise3 ← exercise4 ← exercise5`
 
 ---
 
 ## Exercise 1 — Kitchen Scene
 
-**Files:** `exercise1.js`, `Exercise_1.html`
+**Files:** `01-kitchen-scene/exercise1.js`, `01-kitchen-scene/Exercise_1.html`
 
 Establishes the shared base scene consumed by all subsequent exercises. Returns `{ scene, camera, renderer, controls }`.
 
@@ -112,7 +137,7 @@ Lighting at this stage is a single `AmbientLight(0xffffff, 0.35)` — enough to 
 
 ## Exercise 2 — Articulated Robot Hierarchy
 
-**Files:** `exercise2.js`, `Exercise_2.html`
+**Files:** `02-robot-hierarchy/exercise2.js`, `02-robot-hierarchy/Exercise_2.html`
 
 Imports the full Exercise 1 scene and adds the robot. Returns `{ scene, camera, renderer, controls, robot }` where `robot` exposes named joints for animation.
 
@@ -170,9 +195,9 @@ robot.arms.right.*         // same structure, mirrored
 
 ---
 
-## Exercise 3 — PBR Lighting and Shadow System
+## Exercise 3 — PBR Lighting and Shadows
 
-**Files:** `exercise3.js`, `Exercise_3.html`
+**Files:** `03-pbr-lighting/exercise3.js`, `03-pbr-lighting/Exercise_3.html`
 
 Imports Exercise 2, adds a `SpotLight` over the counter, and opens a lil-gui panel for runtime tuning. Returns the full scene plus `{ ambient, mainLight, refs, gui }`.
 
@@ -207,7 +232,7 @@ Rather than storing mesh references at creation time, Exercise 3 traverses the l
 | Cabinet body | `BoxGeometry` + `y ∈ (0.3, 0.6)` + `height > 0.8` + `width > 2.5` |
 | Counter objects | `y ∈ (0.95, 1.25)` and not in robotMeshes |
 
-`ensureMeshStandard()` converts any non-standard material (e.g. `MeshBasicMaterial`) to `MeshStandardMaterial`, preserving color and texture map, so every surface participates in PBR shading.
+`ensureMeshStandard()` converts any non-standard material to `MeshStandardMaterial`, preserving color and texture map, so every surface participates in PBR shading.
 
 ### lil-gui Panels
 
@@ -222,7 +247,7 @@ Rather than storing mesh references at creation time, Exercise 3 traverses the l
 
 ## Exercise 4 — Procedural Animation and Manual Controls
 
-**Files:** `exercise4.js`, `Exercise_4.html`
+**Files:** `04-animation-interaction/exercise4.js`, `04-animation-interaction/Exercise_4.html`
 
 Imports Exercise 3 and adds a time-driven animation loop plus a GUI that switches between automatic and manual joint control. Returns `{ ..., animateRobot, gui }`.
 
@@ -264,7 +289,7 @@ Moving any manual slider **while in auto mode** auto-transitions: all joints are
 
 ## Exercise 5 — WebXR Tele-operation
 
-**Files:** `exercise5.js`, `Exercise_5.html`
+**Files:** `05-webxr-teleop/exercise5.js`, `05-webxr-teleop/Exercise_5.html`
 
 Imports Exercise 4 and adds VR and AR entry points. In XR, the robot arms are driven in real time by controller position via analytical inverse kinematics. Returns `{ ..., worldRoot, controllers, teleop, updateTeleoperation }`.
 
@@ -298,11 +323,11 @@ shoulderToTarget = targetLocal − shoulder.position
 outward  = (side === "left") ? d.x : −d.x
 downward = −d.y
 
-shoulderZ_mag = atan2(outward, downward)        // abduction
+shoulderZ_mag = atan2(outward, downward)              // abduction
 lateralMag    = hypot(outward, downward)
 shoulderX     = −atan2(d.z, max(0.001, lateralMag))  // flexion (−Z = forward)
 
-shoulderZ = sign(side) * shoulderZ_mag          // mirrored for right arm
+shoulderZ = sign(side) * shoulderZ_mag                // mirrored for right arm
 ```
 
 **Step 3 — Elbow angle via law of cosines**
